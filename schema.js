@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+const mongoose = require('mongoose');
 
 const voice_channel_id = new mongoose.Schema({
     id: {
@@ -23,7 +23,9 @@ const config = new mongoose.Schema({
     }
 })
 
-export default {
+const schemas = {
     voice_channel_id: mongoose.model('voice_channel_id', voice_channel_id, 'voice_channel_ids'),
     config: mongoose.model('config', config, 'configs'),
-    }
+}
+
+module.exports = { schemas }

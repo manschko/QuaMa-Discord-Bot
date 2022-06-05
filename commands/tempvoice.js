@@ -56,10 +56,17 @@ module.exports = {
 }
 
 async function masterChannel(interaction) {
+    //TODO check for duplicates
     const {commandName, options} = interaction
     const channel_ids = options.getString('channel_ids').replace(/\s/g, '').split(',')
     const config = await schemas.config.findOne()
     config.temp_master_channel = []
+    if(channel_ids.length > 5) {
+        return await interaction.reply({
+            content: 'Too many channels',
+            ephemeral: true,
+        });
+    }
     for(const id of channel_ids) {
         try {
             await interaction.client.channels.fetch(id);
@@ -69,7 +76,7 @@ async function masterChannel(interaction) {
                 ephemeral: true,
             });
         }
-        config.temp_master_channel.push({id:id, name:'vc'})
+        config.temp_master_channel.push({id:id, name:`vc`, counter:[0]})
     }
     await config.save()
     await interaction.reply({
@@ -78,32 +85,52 @@ async function masterChannel(interaction) {
     });
 }
 
+
+function sanitize_name(string) {
+    let s = string.replace(/[^a-zA-Z0-9{}()# ]/g, '');
+    const varibles =  s.match(/{{.*?}}+/g)
+    const vaiable_filter = /\busername|counter\b/
+    varibles.forEach(x => {
+        if(!vaiable_filter.test(x.replace(/[{}]/g, ''))){
+            s = s.replace(x, '')
+        }else{
+            s = s.replace(x, '!!' + x.replace(/[{}]/g, '') + '<<')
+        }
+    })
+    s = s.replace(/[{}]/g, '')
+    s = s.replace(/!!/g, '${')
+    s = s.replace(/<</g, '}')
+    return s
+
+}
+
 async function presetName(interaction){
     const {commandName, options} = interaction
-    const name = options.getString('name')
-    const channel_id = options.getChannel('channel_id').id
-    let data =  [{}]
-    if(channel_id) {
-        data.push(await schemas.config.findOne({temp_master_channel: {$elemMatch: {id: channel_id}}},(err, config) => {
-            if (err) {
-                console.log("yaii")
-            }
-        }))
-    }
-    else {
-        data = await schemas.config.findOne()
-    }
-    if(data) {
+    const name = sanitize_name(options.getString('name'))
+    const channel_id = options.getChannel('channel_id')
+    const config = await schemas.config.findOne()
+    if(config.temp_master_channel.length === 0){
         return await interaction.reply({
             content: 'No Master channel found',
             ephemeral: true,
         });
     }
-    data.temp_master_channel.forEach((element, index) => {
-        data.temp_master_channel[index].name = name
-    })
-
-    await data.save()
+    if(channel_id) {
+        if(config.temp_master_channel.filter(channel => channel.id === channel_id.id).length === 0){
+            return await interaction.reply({
+                content: 'No Master channel found',
+                ephemeral: true,
+            });
+        }
+        const i = config.temp_master_channel.findIndex(x => x.id === channel_id.id)
+        config.temp_master_channel[i].name = name
+    }
+    else {
+        config.temp_master_channel.forEach((x, i) => {
+            config.temp_master_channel[i].name = name
+        })
+    }
+    await config.save()
     await interaction.reply({
         content: 'Name preset set',
         ephemeral: true,

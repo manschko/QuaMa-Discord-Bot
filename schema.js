@@ -1,8 +1,20 @@
 const mongoose = require('mongoose');
 
-const voice_channel_id = new mongoose.Schema({
+const temp_channel = new mongoose.Schema({
     id: {
         type: String,
+        required: true
+    },
+    master_channel_id: {
+        type: String,
+        required: true
+    },
+    owner: {
+        type: String,
+        required: true
+    },
+    counter: {
+        type: Number,
         required: true
     }
 })
@@ -17,14 +29,18 @@ const config = new mongoose.Schema({
             name: {
                 type: String,
                 required: true,
-            }
+            },
+            counter: [{
+                type: Number,
+                required: true,
+            }]
         }],
         required: false
     }
 })
 
 const schemas = {
-    voice_channel_id: mongoose.model('voice_channel_id', voice_channel_id, 'voice_channel_ids'),
+    temp_channel: mongoose.model('temp_channel', temp_channel, 'temp_channels'),
     config: mongoose.model('config', config, 'configs'),
 }
 

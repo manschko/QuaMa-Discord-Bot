@@ -25,18 +25,6 @@ module.exports = {
                 .setDescription('The channel id of the Master channel for the name preset')
                 .setRequired(false)
             )
-        ).addSubcommand(subcommand => subcommand
-            .setName('textchannel')//TODO: will be deprecated
-            .setDescription('sets if text channel should be created for temp channel')
-            .addBooleanOption(option => option
-                .setName('create')
-                .setDescription('if text channel should be created')
-                .setRequired(true)
-            ).addChannelOption(option => option
-                .setName('channel_id')
-                .setDescription('The channel id of the Master channel for the text channel preset')
-                .setRequired(false)
-            )
         ),
     async execute(interaction) {
         switch (interaction.options.getSubcommand()) {
@@ -56,13 +44,12 @@ module.exports = {
 }
 
 async function masterChannel(interaction) {
-    //TODO check for duplicates
-    const {commandName, options} = interaction
-    const channel_ids = options.getString('channel_ids').replace(/\s/g, '').split(',')
+    const {options} = interaction
+    const channel_ids = [...new Set(options.getString('channel_ids').replace(/\s/g, '').split(','))]
     const config = await schemas.config.findOne()
     config.temp_master_channel = []
     if(channel_ids.length > 5) {
-        return await interaction.reply({
+        return interaction.reply({
             content: 'Too many channels',
             ephemeral: true,
         });
@@ -71,7 +58,7 @@ async function masterChannel(interaction) {
         try {
             await interaction.client.channels.fetch(id);
         } catch (e) {
-            return await interaction.reply({
+            return interaction.reply({
                 content: 'channel with id ' + id + ' not found',
                 ephemeral: true,
             });
@@ -105,19 +92,19 @@ function sanitize_name(string) {
 }
 
 async function presetName(interaction){
-    const {commandName, options} = interaction
+    const {options} = interaction
     const name = sanitize_name(options.getString('name'))
     const channel_id = options.getChannel('channel_id')
     const config = await schemas.config.findOne()
     if(config.temp_master_channel.length === 0){
-        return await interaction.reply({
+        return interaction.reply({
             content: 'No Master channel found',
             ephemeral: true,
         });
     }
     if(channel_id) {
         if(config.temp_master_channel.filter(channel => channel.id === channel_id.id).length === 0){
-            return await interaction.reply({
+            return interaction.reply({
                 content: 'No Master channel found',
                 ephemeral: true,
             });
@@ -126,7 +113,7 @@ async function presetName(interaction){
         config.temp_master_channel[i].name = name
     }
     else {
-        config.temp_master_channel.forEach((x, i) => {
+        config.temp_master_channel.forEach((i) => {
             config.temp_master_channel[i].name = name
         })
     }

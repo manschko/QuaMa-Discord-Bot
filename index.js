@@ -9,7 +9,6 @@ dotenv.config()
 
 
 const client = new Client({
-    //todo intends
     intents: [
         Intents.FLAGS.GUILDS,
         Intents.FLAGS.GUILD_MESSAGES,

@@ -1,5 +1,6 @@
-const {schemas} = require("../schema");
+const {schemas} = require("../schmas/DBschema");
 const {embeds} = require("../ressources/embed");
+const {buttons} = require("../ressources/voiceButtons");
 
 
 
@@ -65,7 +66,7 @@ async function tempChannelCreate(config, newState) {
                 owner: newState.id,
                 counter: counter
             }).save()
-            newChannel.send({embeds: [embeds.voice_command, embeds.voice_info(newState.id)]})
+            newChannel.send({embeds: [embeds.voice_command, embeds.voice_info(newState.id)], components: [buttons]})
             newState.setChannel(newChannel, {reson: 'moving to created temp channel'})
         })
     })

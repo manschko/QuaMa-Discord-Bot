@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const {schemas} = require('../schema')
+const {schemas} = require('../schmas/DBschema')
 
 module.exports = {
     name: 'ready',

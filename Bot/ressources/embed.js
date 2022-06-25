@@ -15,9 +15,7 @@ const embed_command = new MessageEmbed()
         '***``/voice claim``*** Claims the channel, once the Owner has left\n' +
         '***``/voice transfer <user>``*** Transfers the channel Owner to the user\n' +
         '***``/voice allow <userOrRole>, <userOrRole> ...``*** Adds a user or role to join channel\n' +
-        '***``/voice kick <user>, <user2> ...``*** Removes user from channel and reject user from joining\n' +
-        '***``/voice togglePTT``*** Toggle push to talk\n' +
-        '***``/voice toggleStreaming``*** Toggle Streaming\n', false)
+        '***``/voice kick <user>, <user2> ...``*** Removes user from channel and reject user from joining\n', false)
     .addField('Required Permission to execute command', userPermission, false);
 
 function embed_info(user) {

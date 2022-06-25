@@ -1,7 +1,7 @@
 const {Client, Collection, Intents} = require ('discord.js')
 const dotenv =  require('dotenv')
 const mongoose = require('mongoose');
-const {schemas} = require('./schema')
+const {schemas} = require('./schmas/DBschema')
 const path = require("path");
 const fs = require("fs");
 //permission integer 16787472
@@ -40,6 +40,5 @@ for (const file of eventFiles) {
         client.on(event.name, (...args) => event.execute(...args));
     }
 }
-
 
 client.login(process.env.TOKEN)

@@ -46,7 +46,7 @@ module.exports = {
 }
 
 async function masterChannel(interaction) {
-    const {options} = interaction
+    const {options} = interaction // options
     const channel_ids = [...new Set(options.getString('channel_ids').replace(/\s/g, '').split(','))]
     const config = await schemas.config.findOne()
     config.temp_master_channel = []

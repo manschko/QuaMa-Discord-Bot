@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  db:
+    image: surrealdb/surrealdb:latest
+    ports:
+      - "8000:8000"
+    networks:
+      - discordBot
+    command: start --user root --pass root --log trace
+networks:
+    discordBot:
+        driver: bridge

@@ -1,4 +1,4 @@
 .idea
 Bot/.env
 node_modules
-test.js
+*test.*

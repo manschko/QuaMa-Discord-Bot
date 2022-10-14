@@ -8,7 +8,6 @@ export default (client: ExtendedClient) => {
     const suffix = ".ts";
     const commandFiles = getFiles(suffix, "./commands");
     client.commands = new Collection();
-    console.log(commandFiles);
 
 
     for (const command of commandFiles) {
@@ -18,7 +17,6 @@ export default (client: ExtendedClient) => {
         commands[commandName.toLowerCase()] = commandFile;
     }
 
-    console.log(commands);
 
     client.commands = commands as Collection<String, any>;
 }

@@ -2,11 +2,11 @@ const {MessageEmbed} = require('discord.js');
 
 const userPermission = 'User'
 const color = 0x00ff00
-const embed_command = new MessageEmbed()
+export const tempVoiceEmbed = new MessageEmbed()
     .setColor(color)
     .setTitle('voice')
     .setDescription('Change settings for temporary voice channel')
-    .addField('Command List', '***``/voice name <name>``*** Changes the channels name\n' +
+    .addFields({name:'Command List', value:'***``/voice name <name>``*** Changes the channels name\n' +
         '***``/voice lock``*** Locks the channel\n' +
         '***``/voice unlock``*** Unlocks the channel\n' +
         '***``/voice hide``*** Hides the channel\n' +
@@ -15,10 +15,10 @@ const embed_command = new MessageEmbed()
         '***``/voice claim``*** Claims the channel, once the Owner has left\n' +
         '***``/voice transfer <user>``*** Transfers the channel Owner to the user\n' +
         '***``/voice allow <userOrRole>, <userOrRole> ...``*** Adds a user or role to join channel\n' +
-        '***``/voice kick <user>, <user2> ...``*** Removes user from channel and reject user from joining\n', false)
-    .addField('Required Permission to execute command', userPermission, false);
+        '***``/voice kick <user>, <user2> ...``*** Removes user from channel and reject user from joining\n', inline:false})
+    .addFields({name:'Required Permission to execute command', value:userPermission, inline:false});
 
-function embed_info(user) {
+export function embed_info(user: string) {
     return new MessageEmbed()
         .setColor(color)
         .setTitle('Channel Information')
@@ -27,7 +27,7 @@ function embed_info(user) {
             {name: 'Member Limit ', value: 'unlimited', inline: true},
             {name: 'Lock mode ', value: 'Unlocked', inline: true},
         )
-        .addField('\u200b', '\u200b', false)
+        .addFields({name: '\u200b', value:'\u200b', inline:false})
         .addFields(
             {name: 'Hide mode ', value: 'Unhidden', inline: true},
             {name: 'Member Limit ', value: 'unlimited', inline: true},
@@ -36,4 +36,4 @@ function embed_info(user) {
 }
 
 
-module.exports = {embeds: {voice_command: embed_command, voice_info: embed_info}}
+//module.exports = {embeds: {voice_command: embed_command, voice_info: embed_info}}

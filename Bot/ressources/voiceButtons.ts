@@ -1,7 +1,6 @@
 const {MessageButton, MessageActionRow} = require("discord.js");
 
-module.exports = {
-    buttons: new MessageActionRow()
+export const buttons = new MessageActionRow()
         .addComponents(
             new MessageButton()
                 .setCustomId('claim_temp')
@@ -23,4 +22,3 @@ module.exports = {
                 .setLabel('Hide/Unhide Temp channel')
                 .setStyle('SECONDARY')
         )
-}

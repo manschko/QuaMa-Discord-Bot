@@ -21,5 +21,5 @@ export default {
         check if channel is manuell deleted
         check if people are in masterchannel
         */
-    }
+}
 }
